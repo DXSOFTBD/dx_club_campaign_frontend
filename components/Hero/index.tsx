@@ -19,7 +19,12 @@ const Hero = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/checkIMEI?imei=', { imei });
+      const response = await axios.post('/checkIMEI?imei=', { imei }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+      });
 
       setMessage(response.data.message);
       setData(response.data.message);
