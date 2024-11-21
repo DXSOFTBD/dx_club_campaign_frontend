@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { FormEvent } from 'react'
+import { FormEvent } from 'react';
 import axios from '@/axios/config';
+import axios_request from 'axios';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ExclamationTriangleIcon, GiftTopIcon } from '@heroicons/react/24/solid'
 
@@ -14,17 +15,31 @@ const Hero = () => {
   const [data, setData] = useState(null);
   const [instruction, setInstruction] = useState(null);
   const [open, setOpen] = useState(false)
+  const https = require('https') // Import the 'https' module for custom agent
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/checkIMEI?imei=', { imei }, {
+      // Create a custom Axios instance
+
+      const httpInstance = axios_request.create({
+        httpsAgent: new https.Agent({ rejectUnauthorized: false })
+      });
+      
+      const response = await httpInstance.post('http://invoice.dxtel.com.bd/api/checkIMEI?imei=', { imei }, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
       });
+
+      // const response = await axios.post('/checkIMEI?imei=', { imei }, {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Accept': 'application/json'
+      //   },
+      // });
 
       setMessage(response.data.message);
       setData(response.data.message);
