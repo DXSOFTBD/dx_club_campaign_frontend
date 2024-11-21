@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { FormEvent } from 'react'
-import axios from 'axios';
+import axios from '@/axios/config';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ExclamationTriangleIcon, GiftTopIcon } from '@heroicons/react/24/solid'
 
@@ -18,7 +18,7 @@ const Hero = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/api/checkIMEI?imei=', { imei });
+      const response = await axios.post('/checkIMEI?imei=', { imei });
 
       setMessage(response.data.message);
       setData(response.data.message);
