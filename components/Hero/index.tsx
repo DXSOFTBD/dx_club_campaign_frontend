@@ -12,6 +12,7 @@ const Hero = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
   const [data, setData] = useState(null);
+  const [instruction, setInstruction] = useState(null);
   const [open, setOpen] = useState(false)
 
   const handleSubmit = async (e) => {
@@ -22,6 +23,7 @@ const Hero = () => {
 
       setMessage(response.data.message);
       setData(response.data.message);
+      setInstruction(response.data.instruction);
 
       if (response.data.status) {
         setPopupVisible(true);
@@ -81,7 +83,7 @@ const Hero = () => {
                             </DialogTitle>
                             <div className="mt-2">
                               <p className="text-sm text-gray-500">
-                                {data}
+                                {message}
                               </p>
                             </div>
                           </div>
@@ -90,7 +92,8 @@ const Hero = () => {
                       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">
-                            Please contact with that the Shop Manager from where you have Purchased this Device and Collect your Reward
+                            {instruction}
+                            {/* Please contact with that the Shop Manager from where you have Purchased this Device and Collect your Reward */}
                           </p>
                         </div>
                       </div>
@@ -139,7 +142,7 @@ const Hero = () => {
                             </DialogTitle>
                             <div className="mt-2">
                               <p className="text-sm text-gray-500">
-                                {data}
+                                {message}
                               </p>
                             </div>
                           </div>
@@ -197,7 +200,7 @@ const Hero = () => {
 
                 <p className="mt-5 text-black dark:text-white">
                   Please provide IMEI of your purchased Xiaomi Mobile from DX Tel Store
-                  
+
                 </p>
 
                 {/* <p className="mt-5 text-black dark:text-white">
