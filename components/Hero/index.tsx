@@ -21,19 +21,6 @@ const Hero = () => {
     e.preventDefault();
 
     try {
-      // Create a custom Axios instance
-
-      // const httpInstance = axios_request.create({
-      //   httpsAgent: new https.Agent({ rejectUnauthorized: false })
-      // });
-      
-      // const response = await httpInstance.post('http://invoice.dxtel.com.bd/api/checkIMEI?imei=', { imei }, {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Accept': 'application/json'
-      //   },
-      // });
-
       const response = await axios.post('/checkIMEI?imei=', { imei }, {
         headers: {
           'Content-Type': 'application/json',
