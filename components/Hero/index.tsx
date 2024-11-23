@@ -6,6 +6,14 @@ import axios from '@/axios/config';
 import axios_request from 'axios';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ExclamationTriangleIcon, GiftTopIcon } from '@heroicons/react/24/solid'
+import { ImeiForm } from "@/components/Forms";
+import { SuccessModal, WarningModal } from "@/components/Modals";
+
+interface ApiResponse {
+  status: boolean;
+  message: string;
+  instruction?: string;
+}
 
 const Hero = () => {
   const [imei, setIMEI] = useState("");
@@ -16,33 +24,64 @@ const Hero = () => {
   const [instruction, setInstruction] = useState(null);
   const [open, setOpen] = useState(false)
   const https = require('https') // Import the 'https' module for custom agent
+  const [isLoading, setIsLoading] = useState(false);
+  const [response, setResponse] = useState<ApiResponse | null>(null);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false);
 
-  const handleSubmit = async (e) => {
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await axios.post('/checkIMEI?imei=', { imei }, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json'
+  //       },
+  //     });
+
+  //     setMessage(response.data.message);
+  //     setData(response.data.message);
+  //     setInstruction(response.data.instruction);
+
+  //     if (response.data.status) {
+  //       setPopupVisible(true);
+  //       setWarningPopupVisible(false);
+  //       setOpen(true);
+  //     } else {
+  //       setPopupVisible(false);
+  //       setWarningPopupVisible(true);
+  //     }
+
+  //   } catch (error) {
+  //     setMessage('Error submitting form ' + error);
+  //   }
+  // };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
-      const response = await axios.post('/checkIMEI?imei=', { imei }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+      const { data } = await axios.post<ApiResponse>('/checkIMEI', {
+        imei
       });
 
-      setMessage(response.data.message);
-      setData(response.data.message);
-      setInstruction(response.data.instruction);
+      setResponse(data);
 
-      if (response.data.status) {
-        setPopupVisible(true);
-        setWarningPopupVisible(false);
-        setOpen(true);
+      if (data.status) {
+        setIsSuccessModalOpen(true);
       } else {
-        setPopupVisible(false);
-        setWarningPopupVisible(true);
+        setIsWarningModalOpen(true);
       }
-
     } catch (error) {
-      setMessage('Error submitting form ' + error);
+      setResponse({
+        status: false,
+        message: 'An error occurred while checking the IMEI. Please try again.'
+      });
+      setIsWarningModalOpen(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,18 +92,34 @@ const Hero = () => {
         <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
           <div className="flex lg:items-center lg:gap-8 xl:gap-32.5">
             <div className=" md:w-1/2">
-              <h4 className="mb-4.5 text-lg font-medium text-black dark:text-white">
+              {/* <h4 className="mb-4.5 text-lg font-medium text-black dark:text-white">
                 Welcome to DX Club Campaign Platform
-              </h4>
+              </h4> */}
+              <span className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+                Welcome to DX Club Campaign Platform
+              </span>
               <h1 className="mb-5 pr-16 text-3xl font-bold text-black dark:text-white xl:text-hero ">
                 Check your Luck from {"   "}
                 <span className="relative inline-block before:absolute before:bottom-2.5 before:left-0 before:-z-1 before:h-3 before:w-full before:bg-titlebg dark:before:bg-titlebgdark ">
                   DX Tel
                 </span>
               </h1>
-              <p>
+              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 The #1 After sales service solution provider in Bangladesh. Quickfix's cutting-edge technology, streamlined operational process, and highly trained engineers made Xiaomi Bangladesh the No. 1 after-sales service smartphone brand in Bangladesh.
               </p>
+
+              <ImeiForm
+                imei={imei}
+                setIMEI={setIMEI}
+                onSubmit={handleSubmit}
+                isLoading={isLoading}
+              />
+              <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Verify your Xiaomi device purchased from DX Tel Store</span>
+              </div>
 
               {/* Popup */}
               <Dialog open={popupVisible} onClose={setPopupVisible} className="relative z-10">
@@ -184,7 +239,7 @@ const Hero = () => {
                 </div>
               </Dialog>
 
-              <div className="mt-10">
+              {/* <div className="mt-10">
                 <form onSubmit={handleSubmit}>
                   <div className="flex flex-wrap gap-5">
                     <input
@@ -209,11 +264,7 @@ const Hero = () => {
                   Please provide IMEI of your purchased Xiaomi Mobile from DX Tel Store
 
                 </p>
-
-                {/* <p className="mt-5 text-black dark:text-white">
-                  {message && <p>{message}</p>}
-                </p> */}
-              </div>
+              </div> */}
             </div>
 
             <div className="animate_right hidden md:w-1/2 lg:block">
@@ -257,6 +308,20 @@ const Hero = () => {
                 </div>
               </div>
             </div>
+
+            {/* Modals */}
+            <SuccessModal
+              isOpen={isSuccessModalOpen}
+              onClose={() => setIsSuccessModalOpen(false)}
+              message={response?.message}
+              instruction={response?.instruction}
+            />
+
+            <WarningModal
+              isOpen={isWarningModalOpen}
+              onClose={() => setIsWarningModalOpen(false)}
+              message={response?.message}
+            />
           </div>
         </div >
       </section >
