@@ -11,6 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 import ToasterContext from "../context/ToastContext";
 import GoogleAnalytics from "@/components/GoogleAnalytics/GoogleAnalytics";
+import GoogleTagManager from "@/components/GoogleAnalytics/GoogleTagManager";
 
 export default function RootLayout({
   children,
@@ -18,6 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '';
+  const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || '';
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`dark:bg-black ${inter.className}`}>
@@ -27,6 +29,7 @@ export default function RootLayout({
           defaultTheme="light"
         >
           <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />
+          <GoogleTagManager GTM_ID={GTM_ID} />
           <Lines />
           <Header />
           <ToasterContext />
