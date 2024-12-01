@@ -60,29 +60,32 @@ const Hero = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    try {
-      const { data } = await axios.post<ApiResponse>('/checkIMEI', {
-        imei
-      });
+    setIsSuccessModalOpen(true);
 
-      setResponse(data);
+    // setIsLoading(true);
 
-      if (data.status) {
-        setIsSuccessModalOpen(true);
-      } else {
-        setIsWarningModalOpen(true);
-      }
-    } catch (error) {
-      setResponse({
-        status: false,
-        message: 'An error occurred while checking the IMEI. Please try again.'
-      });
-      setIsWarningModalOpen(true);
-    } finally {
-      setIsLoading(false);
-    }
+    // try {
+    //   const { data } = await axios.post<ApiResponse>('/checkIMEI', {
+    //     imei
+    //   });
+
+    //   setResponse(data);
+
+    //   if (data.status) {
+    //     setIsSuccessModalOpen(true);
+    //   } else {
+    //     setIsWarningModalOpen(true);
+    //   }
+    // } catch (error) {
+    //   setResponse({
+    //     status: false,
+    //     message: 'An error occurred while checking the IMEI. Please try again.'
+    //   });
+    //   setIsWarningModalOpen(true);
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
 
