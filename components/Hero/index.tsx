@@ -8,6 +8,8 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 import { ExclamationTriangleIcon, GiftTopIcon } from '@heroicons/react/24/solid'
 import { ImeiForm } from "@/components/Forms";
 import { SuccessModal, WarningModal } from "@/components/Modals";
+import AdBanner from "../AdBanner/AdBanner";
+import AdSlider from "../AdBanner/AdSlider";
 
 interface ApiResponse {
   status: boolean;
@@ -328,6 +330,14 @@ const Hero = () => {
           </div>
         </div >
       </section >
+
+      {/* Static Ads Section */}
+      <section className="bg-gray-100 py-10">
+        <div className="mx-auto max-w-c-1390 px-4 md:px-8">
+          <h2 className="text-center text-2xl font-bold mb-4">Special Offers</h2>
+          <AdSlider /> {/* Use the AdSlider component here */}
+        </div>
+      </section>
     </>
   );
 };
